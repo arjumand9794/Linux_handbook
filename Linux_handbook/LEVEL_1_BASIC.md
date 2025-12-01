@@ -1,0 +1,140 @@
+# 🔵 1. USER MANAGEMENT
+
+This section covers how to create Linux users, groups, passwords, and manage user information.  
+All commands must be run with **sudo** privileges.
+
+---
+
+## 📍 LOCATION IN REPO  
+**File path:**  
+```
+Linux_handbook/LEVEL_1_BASIC.md
+```
+
+Add this section under "User Management".
+
+---
+
+## 🧑‍💻 1.1 Create a Group for Developers
+
+```bash
+sudo groupadd devteam
+```
+
+### ✔ What this does:
+- Creates a new Linux group named **devteam**
+- Used to assign permissions collectively
+
+---
+
+## 👥 1.2 Create Users and Assign Them to the Group
+
+```bash
+sudo useradd -m -s /bin/bash -G devteam dev1
+sudo useradd -m -s /bin/bash -G devteam dev2
+sudo useradd -m -s /bin/bash -G devteam appuser
+```
+
+### ✔ What this does:
+- `-m` → creates home directory  
+- `-s /bin/bash` → sets shell to bash  
+- `-G devteam` → adds user to devteam group  
+- Creates three example users:
+  - **dev1**
+  - **dev2**
+  - **appuser** (recommended for running applications)
+
+---
+
+## 🔐 1.3 Set Passwords for Users
+
+```bash
+sudo passwd dev1
+sudo passwd dev2
+sudo passwd appuser
+```
+
+### ✔ What this does:
+- Prompts you to set a password for each user  
+- Mandatory if users will log in via SSH or terminal
+
+---
+
+## 🆔 1.4 Verify User and Group Information
+
+```bash
+id dev1
+id dev2
+id appuser
+```
+
+### ✔ What this does:
+Shows details like:
+- UID (User ID)
+- GID (Group ID)
+- Groups user belongs to
+
+---
+
+## 📁 1.5 View List of All Users
+
+Linux stores user details in `/etc/passwd`.
+
+```bash
+cat /etc/passwd
+```
+
+---
+
+## 📂 1.6 View List of All Groups
+
+Group details are stored in `/etc/group`.
+
+```bash
+cat /etc/group
+```
+
+---
+
+## ❌ 1.7 Delete a User (Optional)
+
+```bash
+sudo userdel -r dev1
+```
+
+### ✔ Flags:
+- `-r` → removes home directory also
+
+---
+
+## 🧽 1.8 Delete a Group (Optional)
+
+```bash
+sudo groupdel devteam
+```
+
+---
+
+# 📝 Summary of User Management
+
+| Task | Command |
+|------|----------|
+| Create group | `groupadd devteam` |
+| Create user | `useradd -m -s /bin/bash -G devteam username` |
+| Set password | `passwd username` |
+| Check user info | `id username` |
+| View users | `cat /etc/passwd` |
+| View groups | `cat /etc/group` |
+| Delete user | `userdel -r username` |
+| Delete group | `groupdel groupname` |
+
+---
+
+# ✅ NEXT:  
+If you want, I can generate **Permission Management**, **Package Installation**, **System Info**, etc. in the same clean format.
+
+Just say:
+
+👉 **“Give content for Permissions with path”**  
+or  
+👉 **“Give content for Package Installation with path”**
