@@ -1,0 +1,31 @@
+# 📙 FULL LINUX DEVOPS CONTENT  
+Complete Linux Server Automation Procedures  
+All Commands • All Scripts • All Explanations  
+(One single file for full reference)
+
+---
+
+# 🔵 LEVEL 1 — BASIC (FOUNDATIONAL SKILLS)
+
+---
+
+## 1️⃣ User & Group Management
+
+### Commands
+```bash
+sudo groupadd devteam
+sudo useradd -m -s /bin/bash -G devteam dev1
+sudo useradd -m -s /bin/bash -G devteam dev2
+sudo useradd -m -s /bin/bash -G devteam appuser
+sudo passwd dev1
+sudo passwd dev2
+sudo passwd appuser
+```
+
+### Explanation
+- Creates **devteam** group  
+- Creates developer users  
+- Adds them to the devteam group  
+- Assigns bash shell and home directories  
+
+---
