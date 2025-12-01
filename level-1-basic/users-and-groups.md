@@ -7,9 +7,13 @@ sudo groupadd devteam
 
 ## Create Users
 ```bash
-sudo useradd -m -s /bin/bash -G devteam dev1
-sudo useradd -m -s /bin/bash -G devteam dev2
-sudo useradd -m -s /bin/bash -G devteam appuser
+sudo passwd dev1
+sudo passwd dev2
+sudo passwd appuser
+
+id dev1
+id dev2
+id appuser
 ```
 
 ## Set Passwords
