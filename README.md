@@ -27,8 +27,6 @@ Scenario: You are a DevOps engineer automating Linux server setup for a new appl
   - [12. Configure Firewall Rules](#12-configure-firewall-rules)
   - [13. Implement logrotate for App Logs](#13-implement-logrotate-for-app-logs)
 
-######## Copy this into a file named FULL_PROCEDURE.sh, then run:#########
-  #!/bin/bash
 # FULL LINUX SERVER AUTOMATION SCRIPT FOR DEVOPS
 
 echo "==== Starting Linux Server Setup ===="
