@@ -2,13 +2,8 @@
 Linux_commands _execution (basics to advanced)
 # Linux DevOps Roadmap – App Server Setup
 
-Scenario: I am a DevOps engineer automating Linux server setup for a new application.
-
----
-
-## Table of Contents
-
--linux-server-automation/
+```plaintext
+linux-server-automation/
 ├── README.md
 ├── ROADMAP/
 │   ├── LEVEL_1_BASIC.md
@@ -34,6 +29,8 @@ Scenario: I am a DevOps engineer automating Linux server setup for a new applica
 │   └── lvm_setup.md
 └── assets/
     └── diagrams.png
+```
+
 
 # FULL LINUX SERVER AUTOMATION SCRIPT FOR DEVOPS
 
