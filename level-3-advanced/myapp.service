@@ -1,0 +1,14 @@
+[Unit]
+Description=MyApp Service
+After=network.target
+
+[Service]
+User=appuser
+Group=devteam
+WorkingDirectory=/opt/myapp
+ExecStart=/opt/myapp/bin/start.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
