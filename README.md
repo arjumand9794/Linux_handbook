@@ -32,35 +32,37 @@ linux-server-automation/
 ```
 
 
-# 📘 Linux & DevOps Roadmap
+# 📘 *Level 1 – Basic (Foundational Skills)*  
+### ✔ Users, Groups, Permissions, Packages, System Info
 
-This roadmap contains clickable sections.  
-Open any section to view its full commands and procedures.
-
----
-
-## 🔵 LEVEL 1 — BASIC  
-1. [User & Group Management](FULL_CONTENT.md#1-user--group-management)  
-2. [Permissions & Ownership](FULL_CONTENT.md#2-permissions--ownership)  
-3. [Install Packages](FULL_CONTENT.md#3-install-required-packages)  
-4. [System Information](FULL_CONTENT.md#4-system-information-commands)
+- 👉 [Users & Groups Setup](level-1-basic/users-and-groups.md)  
+- 👉 [Permissions Setup](level-1-basic/permissions.md)  
+- 👉 [Package Installation (Git, Nginx, Java)](level-1-basic/packages-installation.md)  
+- 👉 [System Information Commands](level-1-basic/system-info.md)  
 
 ---
 
-## 🟣 LEVEL 2 — INTERMEDIATE  
-5. [Backup Automation](FULL_CONTENT.md#5-backup-automation)  
-6. [Shell Scripts (Cleanup, Restart, Health)](FULL_CONTENT.md#6-shell-scripts)  
-7. [Log Management](FULL_CONTENT.md#7-log-management)  
-8. [Performance Monitoring](FULL_CONTENT.md#8-performance-monitoring)
+# 📙 Level 2 – Intermediate (Daily DevOps Tasks)
+### ✔ Cron, Shell Scripts, Logs, Monitoring
+
+- 👉 [Backup Automation (Cron)](level-2-intermediate/backup-cron.sh)
+- 👉 [Log Cleanup Script](level-2-intermediate/log-cleanup.sh)
+- 👉 [Health Check Script](level-2-intermediate/health-check.sh)
+- 👉 [Service Restart Script](level-2-intermediate/service-restart.sh)
+- 👉 [Log Monitoring Commands](level-2-intermediate/logs-monitoring.md)
+
 
 ---
 
-## 🔴 LEVEL 3 — ADVANCED  
-9. [Create systemd Service](FULL_CONTENT.md#9-create-systemd-service)  
-10. [SSH Hardening](FULL_CONTENT.md#10-ssh-hardening)  
-11. [LVM Storage Setup](FULL_CONTENT.md#11-lvm-setup)  
-12. [Firewall Rules](FULL_CONTENT.md#12-firewall-rules)  
-13. [Logrotate Configuration](FULL_CONTENT.md#13-logrotate)
+# 📗 Level 3 – Advanced (Production-Ready Linux Admin)
+### ✔ systemd, SSH Security, LVM, Firewall, Logrotate
+
+- 👉 [Custom systemd Service](level-3-advanced/myapp.service)
+- 👉 [SSH Hardening Guide](level-3-advanced/ssh-hardening.md)
+- 👉 [LVM Setup for Storage Scaling](level-3-advanced/lvm-setup.md)
+- 👉 [Firewall Rules](level-3-advanced/firewall-rules.md)
+- 👉 [Logrotate Configuration](level-3-advanced/logrotate.conf)
+
 
 ---
 # 📙 FULL LINUX DEVOPS CONTENT  
