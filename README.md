@@ -32,126 +32,176 @@ linux-server-automation/
 ```
 
 
-# FULL LINUX SERVER AUTOMATION SCRIPT FOR DEVOPS
+# 📘 Linux & DevOps Roadmap
 
-echo "==== Starting Linux Server Setup ===="
+This roadmap contains clickable sections.  
+Open any section to view its full commands and procedures.
 
-### VARIABLES ###
-APPUSER="appuser"
-APPGROUP="devteam"
-APPDIR="/opt/myapp"
-LOGDIR="/var/log/myapp"
-SCRIPTDIR="/opt/scripts"
+---
 
-echo "==== LEVEL 1 — BASIC SETUP ===="
+## 🔵 LEVEL 1 — BASIC  
+1. [User & Group Management](FULL_CONTENT.md#1-user--group-management)  
+2. [Permissions & Ownership](FULL_CONTENT.md#2-permissions--ownership)  
+3. [Install Packages](FULL_CONTENT.md#3-install-required-packages)  
+4. [System Information](FULL_CONTENT.md#4-system-information-commands)
 
-##########################
-### 1. USERS & GROUPS  ###
-##########################
-echo "[+] Creating users & groups..."
-groupadd $APPGROUP
-useradd -m -s /bin/bash -G $APPGROUP dev1
-useradd -m -s /bin/bash -G $APPGROUP dev2
-useradd -m -s /bin/bash -G $APPGROUP $APPUSER
+---
 
-###############################
-### 2. PERMISSIONS SETUP   ###
-###############################
-echo "[+] Setting up directories and permissions..."
-mkdir -p $APPDIR $LOGDIR $SCRIPTDIR
-chown -R $APPUSER:$APPGROUP $APPDIR $LOGDIR
-chmod -R 770 $APPDIR
-chmod g+s $APPDIR
+## 🟣 LEVEL 2 — INTERMEDIATE  
+5. [Backup Automation](FULL_CONTENT.md#5-backup-automation)  
+6. [Shell Scripts (Cleanup, Restart, Health)](FULL_CONTENT.md#6-shell-scripts)  
+7. [Log Management](FULL_CONTENT.md#7-log-management)  
+8. [Performance Monitoring](FULL_CONTENT.md#8-performance-monitoring)
 
-################################
-### 3. INSTALL PACKAGES      ###
-################################
-echo "[+] Installing Git, Nginx and Java..."
-apt update -y
-apt install -y git nginx openjdk-11-jdk curl
+---
 
-################################
-### 4. SYSTEM INFORMATION    ###
-################################
-echo "[+] System Information:"
+## 🔴 LEVEL 3 — ADVANCED  
+9. [Create systemd Service](FULL_CONTENT.md#9-create-systemd-service)  
+10. [SSH Hardening](FULL_CONTENT.md#10-ssh-hardening)  
+11. [LVM Storage Setup](FULL_CONTENT.md#11-lvm-setup)  
+12. [Firewall Rules](FULL_CONTENT.md#12-firewall-rules)  
+13. [Logrotate Configuration](FULL_CONTENT.md#13-logrotate)
+
+---
+# 📙 FULL LINUX DEVOPS CONTENT  
+(All procedures + commands in one file)
+
+---
+
+# 🔵 LEVEL 1 — BASIC
+
+---
+
+## 1️⃣ User & Group Management
+### Commands
+```bash
+sudo groupadd devteam
+sudo useradd -m -s /bin/bash -G devteam dev1
+sudo useradd -m -s /bin/bash -G devteam dev2
+sudo useradd -m -s /bin/bash -G devteam appuser
+sudo passwd dev1
+sudo passwd dev2
+sudo passwd appuser
+```
+
+### Purpose
+- Create developer group  
+- Add users  
+- Provide home directory & bash shell  
+
+---
+
+## 2️⃣ Permissions & Ownership
+### Commands
+```bash
+sudo mkdir -p /opt/myapp /var/log/myapp /opt/scripts
+sudo chown -R appuser:devteam /opt/myapp /var/log/myapp
+sudo chmod -R 770 /opt/myapp
+sudo chmod g+s /opt/myapp
+```
+
+### Purpose
+- 770 = owner & group full access  
+- Others restricted  
+- g+s ensures group inheritance  
+
+---
+
+## 3️⃣ Install Required Packages
+```bash
+sudo apt update -y
+sudo apt install -y git nginx openjdk-11-jdk curl
+```
+
+---
+
+## 4️⃣ System Information Commands
+
+```bash
 lscpu
 free -h
 df -h
-uname -a
 lsblk
+uname -a
+cat /etc/os-release
+```
 
-echo "==== LEVEL 2 — INTERMEDIATE TASKS ===="
+---
 
-####################################
-### 5. BACKUP AUTOMATION SCRIPT  ###
-####################################
-echo "[+] Creating backup script..."
+# 🟣 LEVEL 2 — INTERMEDIATE
 
-cat << 'EOF' > $SCRIPTDIR/backup_myapp.sh
-#!/bin/bash
-SRC_DIR="/opt/myapp"
-DEST_DIR="/backup/myapp"
-TS=$(date +"%Y%m%d-%H%M%S")
-BACKUP_FILE="${DEST_DIR}/myapp-${TS}.tar.gz"
-mkdir -p "${DEST_DIR}"
-tar -czf "${BACKUP_FILE}" "${SRC_DIR}"
-find "${DEST_DIR}" -type f -name "*.tar.gz" -mtime +7 -delete
-EOF
+---
 
-chmod +x $SCRIPTDIR/backup_myapp.sh
-mkdir -p /backup/myapp
+## 5️⃣ Backup Automation
+### Script: `/opt/scripts/backup_myapp.sh`
+```bash
+SRC="/opt/myapp"
+DEST="/backup/myapp"
+TS=$(date +%F-%H-%M-%S)
+mkdir -p $DEST
+tar -czf $DEST/myapp-$TS.tar.gz $SRC
+find $DEST -type f -mtime +7 -delete
+```
 
-(crontab -l 2>/dev/null; echo "0 2 * * * $SCRIPTDIR/backup_myapp.sh") | crontab -
+### Cron Job
+```
+0 2 * * * /opt/scripts/backup_myapp.sh
+```
 
-########################################
-### 6. CLEANUP + RESTART + HEALTH   ###
-########################################
+---
 
-# Cleanup Script
-echo "[+] Creating cleanup script..."
-cat << 'EOF' > $SCRIPTDIR/cleanup_logs.sh
-#!/bin/bash
-find /var/log/myapp -type f -name "*.log" -mtime +14 -delete
-EOF
-chmod +x $SCRIPTDIR/cleanup_logs.sh
+## 6️⃣ Shell Scripts
 
-# Restart Script
-echo "[+] Creating restart script..."
-cat << 'EOF' > $SCRIPTDIR/restart_myapp.sh
-#!/bin/bash
+### cleanup_logs.sh
+```bash
+find /var/log/myapp -type f -mtime +14 -delete
+```
+
+### restart_myapp.sh
+```bash
 systemctl restart myapp
 systemctl status myapp --no-pager
-EOF
-chmod +x $SCRIPTDIR/restart_myapp.sh
+```
 
-# Health-check Script
-echo "[+] Creating health-check script..."
-cat << 'EOF' > $SCRIPTDIR/health_check.sh
-#!/bin/bash
+### health_check.sh
+```bash
 URL="http://localhost:8080/health"
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
-echo "$(date) - Status: $STATUS"
-EOF
-chmod +x $SCRIPTDIR/health_check.sh
+echo "$(date): $STATUS"
+```
 
-##################################
-### 7. LOG MANAGEMENT           ###
-##################################
-echo "[+] Log examples stored at $LOGDIR"
+---
 
-##################################
-### 8. PERFORMANCE TOOLS        ###
-##################################
-apt install -y htop iotop
+## 7️⃣ Log Management
 
-echo "==== LEVEL 3 — ADVANCED TASKS ===="
+```bash
+tail -f /var/log/myapp/app.log
+journalctl -u myapp -f
+grep -i error /var/log/myapp/app.log
+```
 
-###########################################
-### 9. SYSTEMD SERVICE FOR APPLICATION  ###
-###########################################
-echo "[+] Creating systemd service..."
+---
 
-cat << 'EOF' > /etc/systemd/system/myapp.service
+## 8️⃣ Performance Monitoring
+
+```bash
+top
+htop
+iotop
+vmstat 1 5
+df -h
+ss -tulpn
+```
+
+---
+
+# 🔴 LEVEL 3 — ADVANCED
+
+---
+
+## 9️⃣ Create systemd Service
+### File: `/etc/systemd/system/myapp.service`
+```ini
 [Unit]
 Description=MyApp Service
 After=network.target
@@ -163,73 +213,91 @@ WorkingDirectory=/opt/myapp
 ExecStart=/opt/myapp/bin/start.sh
 Restart=always
 RestartSec=5
-Environment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 [Install]
 WantedBy=multi-user.target
-EOF
+```
 
-systemctl daemon-reload
-systemctl enable myapp
-
-##################################
-### 10. SSH HARDENING          ###
-##################################
-echo "[+] Hardening SSH..."
-
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
-
-sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/sshd_config
-sed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config
-
-systemctl restart sshd
-
-##################################
-### 12. UFW FIREWALL SETUP     ###
-##################################
-echo "[+] Enabling firewall rules..."
-apt install -y ufw
-ufw allow 22/tcp
-ufw allow 80/tcp
-ufw allow 443/tcp
-ufw allow 8080/tcp
-ufw --force enable
-
-#################################################
-### 13. LOGROTATE FOR APPLICATION LOGS        ###
-#################################################
-echo "[+] Configuring logrotate..."
-
-cat << 'EOF' > /etc/logrotate.d/myapp
-/var/log/myapp/*.log {
-    daily
-    rotate 14
-    compress
-    missingok
-    notifempty
-    copytruncate
-}
-EOF
-
-echo "==== SETUP COMPLETE SUCCESSFULLY ===="
-
+### Commands
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable myapp
+sudo systemctl start myapp
+sudo journalctl -u myapp -f
+```
 
 ---
 
-## Prerequisites
+## 🔟 SSH Hardening
 
-- OS: Ubuntu 20.04+ / Debian
-- You have `sudo` access.
-- App user: `appuser`
-- App name: `myapp`
-- App directory: `/opt/myapp`
-- Logs directory: `/var/log/myapp`
+### Edit file:
+```
+/etc/ssh/sshd_config
+```
+
+### Recommended Settings
+```
+PermitRootLogin no
+PasswordAuthentication no
+AllowUsers dev1 dev2 appuser
+X11Forwarding no
+```
+
+### Apply Changes
+```bash
+sudo systemctl restart sshd
+```
 
 ---
 
-## Directory Structure
+## 1️⃣1️⃣ LVM Setup
 
 ```bash
-sudo mkdir -p /opt/myapp
-sudo mkdir -p /var/log/myapp
-sudo mkdir -p /opt/scripts
+sudo pvcreate /dev/sdb
+sudo vgcreate vg_data /dev/sdb
+sudo lvcreate -L 50G -n lv_data vg_data
+sudo mkfs.ext4 /dev/vg_data/lv_data
+sudo mkdir /data
+sudo mount /dev/vg_data/lv_data /data
+```
+
+---
+
+## 1️⃣2️⃣ Firewall Rules
+
+```bash
+sudo apt install ufw -y
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 8080/tcp
+sudo ufw enable
+```
+
+---
+
+## 1️⃣3️⃣ Logrotate
+
+### File:
+`/etc/logrotate.d/myapp`
+
+```
+/var/log/myapp/*.log {
+  daily
+  rotate 14
+  compress
+  missingok
+  notifempty
+  copytruncate
+}
+```
+
+---
+
+# 🎉 END OF COMPLETE DOCUMENTATION
+All commands + scripts + procedures in one single file.
+
+👉 **Full documentation:**  
+Click here → **[FULL_CONTENT.md](FULL_CONTENT.md)**
+
+
