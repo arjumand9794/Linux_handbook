@@ -175,6 +175,117 @@ systemctl restart nginx	Restart
 systemctl status nginx	Check status
 journalctl -u nginx -f	Live logs
 
+
+
+
+
+#!/bin/bash
+sudo groupadd devteam
+for user in dev1 dev2 dev3; do
+    sudo useradd -m -G devteam $user
+    echo "User $user created and added to devteam"
+done
+:two: set_permissions.sh
+#!/bin/bash
+sudo mkdir -p /opt/devproject
+sudo chown :devteam /opt/devproject
+sudo chmod 770 /opt/devproject
+echo "Permissions set for /opt/devproject"
+:three: install_packages.sh
+#!/bin/bash
+sudo yum update -y
+sudo yum install -y git nginx java-17-amazon-corretto
+sudo systemctl enable nginx
+sudo systemctl start nginx
+echo "Git, Nginx & Java installed successfully on Amazon Linux"
+:four: system_info.sh
+#!/bin/bash
+echo "CPU Info:"; lscpu
+echo "Memory Info:"; free -h
+echo "Disk Info:"; df -h
+:large_yellow_square: Folder: intermediate
+intermediate
+:one: automate_backup.sh
+#!/bin/bash
+SOURCE=/opt/devproject
+BACKUP=/backup/devproject_$(date +%F).tar.gz
+sudo tar -czvf $BACKUP $SOURCE
+echo "Backup stored at $BACKUP"
+(Add to cron: 0 2 * * * /path/automate_backup.sh)
+:two: log_cleanup.sh
+#!/bin/bash
+find /var/log -type f -mtime +7 -exec rm -f {} \;
+echo "Old logs cleared"
+:three: check_service_status.sh
+#!/bin/bash
+SERVICES="nginx ssh"
+for svc in $SERVICES; do
+    sudo systemctl is-active --quiet $svc && \
+    echo "$svc is running" || \
+    echo "$svc is down"
+done
+:four: performance_monitor.sh
+#!/bin/bash
+echo "---CPU Load---"; top -b -n1 | head -5
+echo "---Disk Space---"; df -h
+echo "---Memory---"; free -h
+:large_red_square: Folder: advanced
+advanced
+:one: custom_systemd_service.sh
+#!/bin/bash
+cat <<EOF | sudo tee /etc/systemd/system/myapp.service
+[Unit]
+Description=My Custom App Service
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/myapp/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable myapp
+sudo systemctl start myapp
+:two: ssh_hardening.sh
+#!/bin/bash
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo systemctl restart sshd
+echo "SSH Hardening Applied: Password login disabled"
+:three: lvm_setup.sh
+#!/bin/bash
+sudo pvcreate /dev/sdb
+sudo vgcreate myvg /dev/sdb
+sudo lvcreate -n mylv -L 5G myvg
+sudo mkfs.ext4 /dev/myvg/mylv
+sudo mkdir /mnt/lvmdata
+sudo mount /dev/myvg/mylv /mnt/lvmdata
+echo "LVM setup completed"
+:four: firewall_setup.sh
+#!/bin/bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw logging on
+echo "Enabling UFW firewall..."
+sudo ufw --force enable
+
+echo "Firewall configured: SSH, HTTP, HTTPS allowed"
+sudo ufw status verbose
+:five: logrotate_config.sh
+#!/bin/bash
+cat <<EOF | sudo tee /etc/logrotate.d/myapp
+/var/log/myapp.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+}
+EOF
+echo "Logrotate config added"
+
 # 📦 FULL LINUX DEVOPS CONTENT  
 (All procedures + commands in one file)
 
